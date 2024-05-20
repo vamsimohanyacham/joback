@@ -57,7 +57,7 @@ app.post('/signin/', async (request, response) => {
 })
 
 app.post('/login/', async (req, res) => {
-  const {name, password} = req.body
+  const {name, password} = req.query
 
   if (!name || !password) {
     return res.status(400).json({error: 'Name and password are required'})
