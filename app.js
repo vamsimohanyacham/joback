@@ -57,23 +57,22 @@ app.post('/signin/', async (request, response) => {
 })
 
 app.post('/login/', async (req, res) => {
-  const {userdetails} = req.query
-  const {name,password}=userdetails
+  const { name, password } = req.body;
 
   if (!name || !password) {
-    return res.status(400).json({error: 'Name and password are required'})
+    return res.status(400).json({ error: 'Name and password are required' });
   }
 
-  const data = `SELECT * FROM user WHERE name = '${name}' AND password = '${password}';`
-  const user = await db.get(data)
+  const query = `SELECT * FROM user WHERE name = ? AND password = ?`;
+  const user = await db.get(query, [name, password]);
 
   if (user) {
-    const jwtToken = generateToken(user)
-    return res.json({token: jwtToken})
+    const jwtToken = generateToken(user);
+    return res.json({ token: jwtToken });
   } else {
-    return res.status(404).json({error: 'User not found'})
+    return res.status(404).json({ error: 'User not found' });
   }
-})
+});
 
 app.get('/', async (res, req) => {
   const data = `select * from user`
